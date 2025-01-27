@@ -30,18 +30,19 @@ bootJar {
     mainClass.set('com.example.YourApplication')  // Correct main class path
 }
 
+// Custom task to copy the JAR to the root directory and rename it to app.jar
+task copyJarToRoot(type: Copy) {
+    dependsOn bootJar // Ensure the bootJar task runs first
+    from tasks.bootJar.archiveFile
+    into projectDir  // Project root directory
+    rename { 'app.jar' }  // Rename the JAR to app.jar
+}
+
+// Ensure that the build task runs the copyJarToRoot task
+build.finalizedBy(copyJarToRoot)
+
 docker {
     name "ghcr.io/${project.group}/${project.name}:${version}"
     files tasks.bootJar.archiveFile
     buildArgs(['JAR_FILE': tasks.bootJar.archiveFileName])
-}
-
-// Ensure the Docker build depends on the bootJar task
-task dockerBuildImage(dependsOn: bootJar) {
-    doLast {
-        docker.build("ghcr.io/${project.group}/${project.name}:${version}", {
-            files tasks.bootJar.archiveFile
-            buildArgs(['JAR_FILE': tasks.bootJar.archiveFileName])
-        })
-    }
 }
