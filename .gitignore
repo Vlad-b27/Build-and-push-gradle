@@ -35,6 +35,3 @@ gradle-wrapper.properties
 # Docker-related files (optional, if Docker files shouldn't be versioned)
 .docker/
 
-# Gradle Wrapper files (optional, if not using Gradle Wrapper)
-gradlew
-gradlew.bat
