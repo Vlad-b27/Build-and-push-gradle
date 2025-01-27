@@ -1,0 +1,59 @@
+name: Build React Native APK
+
+on:
+  push:
+    branches:
+      - main    # Trigger on pushes to the main branch (you can change to other branches)
+  pull_request:
+    branches:
+      - main    # Trigger on pull requests to the main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Step 2: Set up JDK
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+          distribution: "adoptopenjdk"
+
+      # Step 3: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # Use Node.js version that your React Native project supports
+
+      # Step 4: Install dependencies
+      - name: Install dependencies
+        run: |
+          npm install
+          cd android && ./gradlew clean
+
+      # Step 5: Set up Android SDK
+      - name: Set up Android SDK
+        run: |
+          yes | sdkmanager --licenses
+          sdkmanager "build-tools;30.0.3" "platforms;android-30" "platform-tools"
+      
+      # Step 6: Set up Keystore (for signing APK)
+      - name: Set up Keystore
+        run: echo "$ANDROID_KEYSTORE" | base64 --decode > android/app/my-release-key.keystore
+        env:
+          ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}  # Store the keystore as a secret
+
+      # Step 7: Build the APK
+      - name: Build release APK
+        run: cd android && ./gradlew assembleRelease
+
+      # Step 8: Upload APK as Artifact
+      - name: Upload APK as an artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-release.apk
+          path: android/app/build/outputs/apk/release/app-release.apk

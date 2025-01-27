@@ -1,4 +1,4 @@
-name: React Native CI/CD Pipeline
+name: React Native CI
 
 on:
   push:
