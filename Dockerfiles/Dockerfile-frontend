@@ -4,9 +4,6 @@ FROM node:18
 # Set the working directory inside the container
 WORKDIR /app
 
-# Install dependencies like yarn
-RUN npm install -g yarn
-
 # Install project dependencies
 COPY package.json yarn.lock ./
 RUN yarn install
