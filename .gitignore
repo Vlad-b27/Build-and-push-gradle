@@ -31,3 +31,9 @@ Thumbs.db
 # Docker-related files (optional, if Docker files shouldn't be versioned)
 .docker/
 
+# Ignore Gradle build directories (output)
+.gradle/
+
+# Include Gradle wrapper files (do not ignore these)
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
