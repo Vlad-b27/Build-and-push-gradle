@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./ # The root of your project
+      dockerfile: Dockerfiles/Dockerfile  # Path to the Dockerfile in the Dockerfiles directory
+    image: ghcr.io/${REPO_OWNER}/backend:${COMMIT_SHA}  # Image tag using environment variables
+    ports:
+      - "8080:8080"  # Map port 8080 of the container to port 8080 of the host
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod  # Example environment variable for Spring Boot (if needed)
+    volumes:
+      - .:/app  # Mount the current directory to /app in the container (optional)
+    depends_on:
+      - db  # If you have a database service, make sure it starts first (if needed)
+
+  db:
+    image: postgres:latest  # Example database (Postgres) service
+    environment:
+      POSTGRES_USER: example
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: example_db
+    ports:
+      - "5432:5432"  # Expose Postgres port
