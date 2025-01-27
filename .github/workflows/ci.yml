@@ -30,14 +30,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Check if gradlew exists and is executable
-        run: |
-          if [ ! -f "./gradlew" ]; then
-            echo "Error: gradlew not found!"
-            exit 1
-          fi
-          chmod +x ./gradlew
-
       - name: Build the project with Gradle
         run: ./gradlew build -x test  # Skip tests for speed (optional)
 
