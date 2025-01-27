@@ -9,8 +9,7 @@ on:
       - '*'  # Trigger on any PR to any branch
 
 jobs:
-  # Stage 1: Build Code
-  build-code:
+  build-and-push:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -34,27 +33,14 @@ jobs:
         run: |
           ./gradlew build -x test  # Builds the project, skipping tests for speed
 
-  # Stage 2: Build Docker Image
-  build-docker-image:
-    needs: build-code  # This job depends on the "build-code" job completing first
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
       - name: Build Docker image
         run: |
           # Convert repository owner to lowercase
           REPO_OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
-          
-          # Build the Docker image using full commit SHA
+
+          # Build Docker image using the full commit SHA
           docker build -t ghcr.io/${REPO_OWNER}/backend:${{ github.sha }} .
 
-  # Stage 3: Push Docker Image to GitHub Container Registry
-  push-docker-image:
-    needs: build-docker-image  # This job depends on the "build-docker-image" job completing first
-    runs-on: ubuntu-latest
-    steps:
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -66,6 +52,6 @@ jobs:
         run: |
           # Convert repository owner to lowercase
           REPO_OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
-          
-          # Push the Docker image using full commit SHA
+
+          # Push the Docker image to GitHub Container Registry
           docker push ghcr.io/${REPO_OWNER}/backend:${{ github.sha }}
