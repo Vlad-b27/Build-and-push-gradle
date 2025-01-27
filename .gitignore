@@ -15,10 +15,6 @@ build/
 .DS_Store
 Thumbs.db
 
-# Gradle Wrapper
-gradle-wrapper.jar
-gradle-wrapper.properties
-
 # Spring Boot JAR and related files
 *.jar
 *.war
