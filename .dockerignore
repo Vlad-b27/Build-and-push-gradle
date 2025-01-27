@@ -1,0 +1,25 @@
+# Ignore Gradle build directories
+.gradle/
+build/
+
+# Ignore IDE-specific files
+.idea/
+.vscode/
+*.iml
+
+# Ignore logs and temp files
+*.log
+*.tmp
+*.swp
+
+# Ignore Dockerfile and associated files from being added to the image
+.dockerignore
+.gitignore
+Dockerfile
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore local configurations or any sensitive files
+*.env

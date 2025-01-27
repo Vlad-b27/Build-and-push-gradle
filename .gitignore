@@ -1,0 +1,40 @@
+# Gradle files
+.gradle/
+build/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Eclipse
+*.classpath
+*.project
+*.settings/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Gradle Wrapper
+gradle-wrapper.jar
+gradle-wrapper.properties
+
+# Spring Boot JAR and related files
+*.jar
+*.war
+*.ear
+
+# Other IDEs (e.g., VS Code, NetBeans)
+.vscode/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+
+# Docker-related files (optional, if Docker files shouldn't be versioned)
+.docker/
+
+# Gradle Wrapper files (optional, if not using Gradle Wrapper)
+gradlew
+gradlew.bat
