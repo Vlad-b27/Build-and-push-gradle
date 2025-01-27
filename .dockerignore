@@ -23,3 +23,10 @@ Thumbs.db
 
 # Ignore local configurations or any sensitive files
 *.env
+
+
+node_modules
+npm-debug.log
+Dockerfile*
+.dockerignore
+*.git
