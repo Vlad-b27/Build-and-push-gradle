@@ -1,57 +1,57 @@
-name: CI - Build and Push Docker Image to GitHub Container Registry
+# name: CI - Build and Push Docker Image to GitHub Container Registry
 
-on:
-  push:
-    branches:
-      - '*'  # Trigger on any push to any branch
-  pull_request:
-    branches:
-      - '*'  # Trigger on any PR to any branch
+# on:
+#   push:
+#     branches:
+#       - '*'  # Trigger on any push to any branch
+#   pull_request:
+#     branches:
+#       - '*'  # Trigger on any PR to any branch
 
-jobs:
-  build-and-push:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+# jobs:
+#   build-and-push:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v2
 
-      - name: Set up JDK 17 (Adoptium)
-        uses: actions/setup-java@v2
-        with:
-          java-version: '17'
-          distribution: 'temurin'
+#       - name: Set up JDK 17 (Adoptium)
+#         uses: actions/setup-java@v2
+#         with:
+#           java-version: '17'
+#           distribution: 'temurin'
 
-      - name: Cache Gradle dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+#       - name: Cache Gradle dependencies
+#         uses: actions/cache@v3
+#         with:
+#           path: ~/.gradle/caches
+#           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+#           restore-keys: |
+#             ${{ runner.os }}-gradle-
 
-      - name: Build with Gradle
-        run: |
-          ./gradlew build -x test  # Builds the project, skipping tests for speed
+#       - name: Build with Gradle
+#         run: |
+#           ./gradlew build -x test  # Builds the project, skipping tests for speed
 
-      - name: Build Docker image
-        run: |
-          # Convert repository owner to lowercase
-          REPO_OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+#       - name: Build Docker image
+#         run: |
+#           # Convert repository owner to lowercase
+#           REPO_OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
 
-          # Build Docker image from the Dockerfile in the Dockerfiles directory
-          docker build -f Dockerfiles/Dockerfile-backend -t ghcr.io/${REPO_OWNER}/backend:${{ github.sha }} .
+#           # Build Docker image from the Dockerfile in the Dockerfiles directory
+#           docker build -f Dockerfiles/Dockerfile-backend -t ghcr.io/${REPO_OWNER}/backend:${{ github.sha }} .
 
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+#       - name: Log in to GitHub Container Registry
+#         uses: docker/login-action@v2
+#         with:
+#           registry: ghcr.io
+#           username: ${{ github.actor }}
+#           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push Docker image to GitHub Container Registry
-        run: |
-          # Convert repository owner to lowercase
-          REPO_OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+#       - name: Push Docker image to GitHub Container Registry
+#         run: |
+#           # Convert repository owner to lowercase
+#           REPO_OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
 
-          # Push the Docker image to GitHub Container Registry
-          docker push ghcr.io/${REPO_OWNER}/backend:${{ github.sha }}
+#           # Push the Docker image to GitHub Container Registry
+#           docker push ghcr.io/${REPO_OWNER}/backend:${{ github.sha }}
