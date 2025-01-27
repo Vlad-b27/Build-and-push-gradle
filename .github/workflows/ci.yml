@@ -10,7 +10,7 @@ on:
 
 jobs:
   # Stage 1: Build Code
-  build_code:
+  build-code:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -35,8 +35,8 @@ jobs:
           ./gradlew build -x test  # Builds the project, skipping tests for speed
 
   # Stage 2: Build Docker Image
-  build_docker_image:
-    needs: build_code  # This job depends on the "build_code" job completing first
+  build-docker-image:
+    needs: build-code  # This job depends on the "build-code" job completing first
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -44,11 +44,15 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/backend:${{ github.sha }} .
+          # Convert repository owner to lowercase
+          REPO_OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          
+          # Build the Docker image using full commit SHA
+          docker build -t ghcr.io/${REPO_OWNER}/backend:${{ github.sha }} .
 
   # Stage 3: Push Docker Image to GitHub Container Registry
-  push_docker_image:
-    needs: build_docker_image  # This job depends on the "build_docker_image" job completing first
+  push-docker-image:
+    needs: build-docker-image  # This job depends on the "build-docker-image" job completing first
     runs-on: ubuntu-latest
     steps:
       - name: Log in to GitHub Container Registry
@@ -60,4 +64,8 @@ jobs:
 
       - name: Push Docker image to GitHub Container Registry
         run: |
-          docker push ghcr.io/backend:${{ github.sha }}
+          # Convert repository owner to lowercase
+          REPO_OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          
+          # Push the Docker image using full commit SHA
+          docker push ghcr.io/${REPO_OWNER}/backend:${{ github.sha }}
