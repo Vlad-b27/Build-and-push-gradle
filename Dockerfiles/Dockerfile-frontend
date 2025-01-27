@@ -1,16 +1,10 @@
 # Use the official latest Node.js image as the base image (Node.js 18.x is the latest LTS)
-FROM node:20-alpine
+FROM node:18
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Install Android SDK for React Native builds (optional, depending on your use case)
-RUN apt-get update && apt-get install -y \
-  openjdk-11-jdk \
-  android-sdk \
-  && rm -rf /var/lib/apt/lists/*
-
-# Install other dependencies like yarn (if using yarn)
+# Install dependencies like yarn
 RUN npm install -g yarn
 
 # Install project dependencies
