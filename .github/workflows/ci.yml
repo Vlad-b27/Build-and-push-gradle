@@ -31,7 +31,7 @@ jobs:
           # Get short SHA for the commit
           SHORT_SHA=$(git rev-parse --short HEAD)
           docker build -t ghcr.io/${{ env.COMMITTER_NAME }}/${{ github.run_number }}:${SHORT_SHA} .
-
+      
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
         with:
