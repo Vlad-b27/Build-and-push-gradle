@@ -26,12 +26,22 @@ tasks.named('test') {
 }
 
 // Specify the main class for the bootJar task
-// Correct main class for Spring Boot 2.5+ and later
 bootJar {
     mainClass.set('com.example.YourApplication')  // Correct main class path
 }
+
 docker {
     name "ghcr.io/${project.group}/${project.name}:${version}"
     files tasks.bootJar.archiveFile
     buildArgs(['JAR_FILE': tasks.bootJar.archiveFileName])
+}
+
+// Ensure the Docker build depends on the bootJar task
+task dockerBuildImage(dependsOn: bootJar) {
+    doLast {
+        docker.build("ghcr.io/${project.group}/${project.name}:${version}", {
+            files tasks.bootJar.archiveFile
+            buildArgs(['JAR_FILE': tasks.bootJar.archiveFileName])
+        })
+    }
 }
