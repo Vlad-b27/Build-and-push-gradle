@@ -1,4 +1,4 @@
-public package src.main.java.com.example;
+package com.example;  // Correct package declaration
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,6 +8,4 @@ public class YourApplication {
     public static void main(String[] args) {
         SpringApplication.run(YourApplication.class, args);
     }
-} {
-    
 }
