@@ -3,10 +3,10 @@ name: CI - Build and Push Docker Image to GitHub Container Registry
 on:
   push:
     branches:
-      - '*'  # or the branch you want to trigger the workflow on
+      - '*'  # Trigger on any push to any branch
   pull_request:
     branches:
-      - '*'
+      - '*'  # Trigger on any PR to any branch
 
 jobs:
   build:
@@ -16,11 +16,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up JDK 17
+      - name: Set up JDK 17 (Adoptium)
         uses: actions/setup-java@v2
         with:
           java-version: '17'
-          distribution: 'adoptopenjdk'
+          distribution: 'temurin'  # Use temurin, the new Adoptium distribution
 
       - name: Cache Gradle dependencies
         uses: actions/cache@v2
