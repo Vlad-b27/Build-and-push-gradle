@@ -8,3 +8,15 @@ Repo for testing pipelines
 # https://medium.com/geekculture/react-native-generate-apk-debug-and-release-apk-4e9981a2ea51
 # https://instamobile.io/android-development/generate-react-native-release-build-android/
 # https://hub.docker.com/r/ekreative/android
+
+
+
+
+# OpenApi image
+# Rapidoc
+# StoryBook
+
+
+# how to start app https://reactnative.dev/docs/getting-started-without-a-framework?package-manager=yarn
+# structure project frontend: https://fadamakis.com/a-front-end-application-folder-structure-that-makes-sense-ecc0b690968b  ; https://gist.github.com/AmanAgarwal041/c872a059d00675d837f6352aa838b4e1 ; https://michalzalecki.com/elegant-frontend-architecture/
+# Keycloak https://www.keycloak.org/server/containers

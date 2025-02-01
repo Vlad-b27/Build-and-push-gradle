@@ -1,0 +1,24 @@
+# Use the official Keycloak image
+FROM quay.io/keycloak/keycloak:26.1.0
+
+# Optional: You can copy custom configuration files if needed
+COPY ./custom-config /opt/keycloak/standalone/configuration/
+
+# Optional: You could expose ports if needed (Keycloak default ports are 8080 and 8443)
+EXPOSE 7080 7443
+
+# Set default environment variables for Keycloak (can be overridden in docker-compose)
+ENV KC_DB=postgres
+ENV KC_DB_URL=jdbc:postgresql://db:5432/trips
+ENV KC_DB_USERNAME=postgres
+ENV KC_DB_PASSWORD=postgres
+ENV KC_HOSTNAME=localhost
+ENV KC_HOSTNAME_PORT=7080
+ENV KC_HOSTNAME_STRICT_BACKCHANNEL="true"
+ENV KEYCLOAK_ADMIN=admin
+ENV KEYCLOAK_ADMIN_PASSWORD=admin
+ENV KC_HEALTH_ENABLED="true"
+ENV KC_LOG_LEVEL=info
+
+# Command to start Keycloak (this will override the default command)
+CMD ["start-dev", "--http-port", "7080", "--https-port", "7443"]

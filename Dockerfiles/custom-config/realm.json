@@ -1,0 +1,19 @@
+{
+    "realm": "master",
+    "users": [
+      {
+        "username": "newuser",
+        "enabled": true,
+        "firstName": "New",
+        "lastName": "User",
+        "email": "newuser@example.com",
+        "credentials": [
+          {
+            "type": "password",
+            "value": "password123"
+          }
+        ]
+      }
+    ]
+  }
+  

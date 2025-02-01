@@ -1,25 +1,45 @@
 version: '3.8'
 
 services:
-  backend:
-    build:
-      context: ./ # The root of your project
-      dockerfile: Dockerfiles/Dockerfile  # Path to the Dockerfile in the Dockerfiles directory
-    image: ghcr.io/${REPO_OWNER}/backend:${COMMIT_SHA}  # Image tag using environment variables
-    ports:
-      - "8080:8080"  # Map port 8080 of the container to port 8080 of the host
-    environment:
-      - SPRING_PROFILES_ACTIVE=prod  # Example environment variable for Spring Boot (if needed)
-    volumes:
-      - .:/app  # Mount the current directory to /app in the container (optional)
-    depends_on:
-      - db  # If you have a database service, make sure it starts first (if needed)
-
   db:
-    image: postgres:latest  # Example database (Postgres) service
+    image: postgres:latest
+    container_name: db
     environment:
-      POSTGRES_USER: example
-      POSTGRES_PASSWORD: example
-      POSTGRES_DB: example_db
+      - POSTGRES_DB=trips
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"  # Expose Postgres port
+      - "5432:5432"
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.1.0
+    container_name: keycloak
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://db:5432/trips
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: postgres
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 7080
+      KC_HOSTNAME_STRICT_BACKCHANNEL: "true"
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HEALTH_ENABLED: "true"
+      KC_LOG_LEVEL: info
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7080/health/ready"]
+      interval: 15s
+      timeout: 2s
+      retries: 15
+    volumes:
+      - ./custom-config:/opt/keycloak/standalone/configuration/
+    command: ["start-dev", "--http-port", "7080", "--https-port", "7443"]
+    depends_on: [db]
+    ports:
+      - "7080:7080"
+      - "7443:7443"
+
+volumes:
+  postgres-data:
