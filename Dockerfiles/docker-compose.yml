@@ -2,14 +2,15 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:latest
+    image: postgres:15 # latest at 12.02.2025
     container_name: db
     environment:
-      - POSTGRES_DB=trips
+      - POSTGRES_DB=travel
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     volumes:
       - postgres-data:/var/lib/postgresql/data
+      - ./postgres/init-scripts:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
 
@@ -64,7 +65,7 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
   kafdrop:
-    image: obsidiandynamics/kafdrop:latest
+    image: obsidiandynamics/kafdrop:4.1.0
     container_name: kafdrop
     environment:
       - KAFKA_BROKERCONNECT=kafka:9092
@@ -74,6 +75,16 @@ services:
       - "9000:9000"
     depends_on:
       - kafka
+  swagger-ui:
+    image: docker.swagger.io/swaggerapi/swagger-ui
+    container_name: swagger-ui
+    ports:
+      - "80:8080"
+    environment:
+      - BASE_URL=/swagger
+      - SWAGGER_JSON=/swagger.json #path for json
+    volumes:
+      - /api/swagger.json:/ # mounting for smagger json 
 
 volumes:
   postgres-data:
