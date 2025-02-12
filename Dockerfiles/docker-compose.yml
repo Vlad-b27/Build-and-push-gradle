@@ -75,6 +75,7 @@ services:
       - "9000:9000"
     depends_on:
       - kafka
+      
   swagger-ui:
     image: docker.swagger.io/swaggerapi/swagger-ui
     container_name: swagger-ui
