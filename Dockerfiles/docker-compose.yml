@@ -85,7 +85,7 @@ services:
       - BASE_URL=/swagger
       - SWAGGER_JSON=/swagger.json #path for json
     volumes:
-      - /api/swagger.json:/ # mounting for smagger json 
+      - /api/swagger.json:/root # mounting for swagger json 
 
 volumes:
   postgres-data:
