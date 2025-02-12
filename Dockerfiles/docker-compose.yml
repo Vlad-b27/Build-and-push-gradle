@@ -79,7 +79,7 @@ services:
     image: docker.swagger.io/swaggerapi/swagger-ui
     container_name: swagger-ui
     ports:
-      - "80:8080"
+      - "80:8081"
     environment:
       - BASE_URL=/swagger
       - SWAGGER_JSON=/swagger.json #path for json
