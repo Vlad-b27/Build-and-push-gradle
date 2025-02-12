@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:15 # latest at 12.02.2025
+    image: postgres:latest # latest at 12.02.2025
     container_name: db
     environment:
       - POSTGRES_DB=travel
